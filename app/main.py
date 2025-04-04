@@ -3,6 +3,7 @@ from PIL import Image
 import torch
 import torchvision.transforms as transforms
 import io
+import uvicorn
 
 app = FastAPI()
 
@@ -33,3 +34,8 @@ async def convert_image(file: UploadFile = File(...)):
 
     except Exception as e:
         return {"error": str(e)}
+
+
+# Run FastAPI on port 8090
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8090)
