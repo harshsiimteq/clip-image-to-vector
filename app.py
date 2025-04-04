@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-import torch
 import clip
-import numpy
+import torch
 
 app = FastAPI()
 
