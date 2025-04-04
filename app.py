@@ -28,14 +28,9 @@ def index():
 
 @app.post('/img-to-vector')
 async def to_vector(file: UploadFile = File(...)):
-    image = Image.open(io.BytesIO(await file.read())).convert("RGB")
-
     try:
+        image = Image.open(io.BytesIO(await file.read())).convert("RGB")
         vector = extract_image_vector(image)
-        return {
-            "vector": vector
-        }
+        return {"vector": vector}
     except Exception as e:
-        return {
-            "error": str(e)
-        }
+        return {"error": str(e)}
