@@ -1,5 +1,6 @@
-fastapi
-torch
-clip
-numpy
 fastapi[standard]
+uvicorn
+torch
+openai-clip
+pillow
+numpy
