@@ -3,4 +3,3 @@ uvicorn
 torch
 torchvision
 pillow
-clip
