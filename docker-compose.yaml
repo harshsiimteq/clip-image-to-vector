@@ -3,7 +3,7 @@ services:
     container_name: "image-vector-api"
     build: .
     ports:
-      - "8090:8080"
+      - "8000:8000"
     volumes:
       - .:/app
     restart: always
