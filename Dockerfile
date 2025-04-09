@@ -8,16 +8,16 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 # Copy only necessary files to avoid bloating the image
-COPY requirements.txt .
+COPY /app /app
 
 # Install dependencies efficiently
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the main application files
-COPY app /app
+# Ensure correct permissions
+RUN chmod +x /app
 
 # Expose the API port
 EXPOSE 8000
 
 # Run FastAPI with Uvicorn
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

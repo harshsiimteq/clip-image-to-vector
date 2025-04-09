@@ -1,4 +1,4 @@
-from utils import extract_text_features, extract_image_features
+from .utils import extract_text_features, extract_image_features
 from fastapi import FastAPI, Form
 from fastapi.responses import JSONResponse
 import uvicorn
@@ -34,7 +34,6 @@ class ImageURLRequest(BaseModel):
 
 @app.post("/vector/image")
 async def vector_from_image_url(payload: ImageURLRequest):
-    print(payload)
     try:
         response = requests.get(payload.image_url)
         response.raise_for_status()
