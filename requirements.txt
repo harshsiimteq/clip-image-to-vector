@@ -1,5 +1,6 @@
-fastapi[uvicorn]
+fastapi
+uvicorn
+torch
 pydantic
 requests
-open-clip-torch
 pillow
