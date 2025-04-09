@@ -8,9 +8,15 @@ from io import BytesIO
 
 app = FastAPI()
 
+class ImageURLRequest(BaseModel):
+    image_url: str
+
+class TextRequest(BaseModel):
+    text: str
+
 @app.post("/vector/text")
-def vector_from_text(text: str = Form(...)):
-    print(f"Received text: {text}")
+def vector_from_text(payload: TextRequest):
+    text = payload.text
     try:
         vector = extract_text_features(text)
 
@@ -29,8 +35,6 @@ def vector_from_text(text: str = Form(...)):
             "error": str(e)
         })
 
-class ImageURLRequest(BaseModel):
-    image_url: str
 
 @app.post("/vector/image")
 async def vector_from_image_url(payload: ImageURLRequest):
