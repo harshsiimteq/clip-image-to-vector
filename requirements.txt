@@ -1,6 +1,0 @@
-fastapi[standard]
-uvicorn
-torch
-openai-clip
-pillow
-numpy

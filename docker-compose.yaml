@@ -1,9 +1,10 @@
 services:
   image_vector_api:
-    container_name: "image-vector-api"
+    container_name: "img2vector"
     build: .
     ports:
       - "8000:8000"
     volumes:
       - .:/app
+    working_dir: /app
     restart: always
