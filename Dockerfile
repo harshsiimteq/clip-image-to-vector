@@ -1,11 +1,20 @@
-FROM python:3.10-slim
+# Use a lightweight base image
+FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 
+# Set working directory
 WORKDIR /app
 
-COPY app/requirements.txt requirements.txt
+# Copy only necessary files to avoid bloating the image
+COPY requirements.txt .
 
+# Install dependencies efficiently
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app/ app/
+# Copy the main application files
+COPY . .
 
-CMD uvicorn app.main:app --host=0.0.0.0 --reload
+# Expose the API port
+EXPOSE 8000
+
+# Run FastAPI with Uvicorn
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

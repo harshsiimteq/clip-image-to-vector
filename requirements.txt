@@ -1,6 +1,6 @@
-fastapi[standard]
-uvicorn
+fastapi[uvicorn]
 torch
 openai-clip
 pillow
 numpy
+requests
