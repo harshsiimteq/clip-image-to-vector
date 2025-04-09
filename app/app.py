@@ -1,36 +1,63 @@
-from fastapi import FastAPI, File, UploadFile
-import clip
-import torch
-from PIL import Image
-import numpy as np
-import io
+from utils import extract_text_features, extract_image_features
+from fastapi import FastAPI, Form
+from fastapi.responses import JSONResponse
+import uvicorn
+from pydantic import BaseModel
+import requests
+from io import BytesIO
 
 app = FastAPI()
 
-# Load CLIP model
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-B/32", device=device)
-
-
-def extract_image_vector(image):
-    image = preprocess(image).unsqueeze(0).to(device)  # Preprocess & add batch dim
-    with torch.no_grad():
-        features = model.encode_image(image)
-    return features.cpu().numpy().astype(np.float32).tolist()[0]
-
-
-@app.get('/')
-def index():
-    return {
-        "message": "Hello world"
-    }
-
-
-@app.post('/img-to-vector')
-async def to_vector(file: UploadFile = File(...)):
+@app.post("/vector/text")
+def vector_from_text(text: str = Form(...)):
+    print(f"Received text: {text}")
     try:
-        image = Image.open(io.BytesIO(await file.read())).convert("RGB")
-        vector = extract_image_vector(image)
-        return {"vector": vector}
+        vector = extract_text_features(text)
+
+        if hasattr(vector, 'tolist'):
+            vector = vector.tolist()
+
+        return {
+            "status": "success",
+            "data": {
+                "vector": vector
+            }
+        }
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={
+            "status": "error",
+            "error": str(e)
+        })
+
+class ImageURLRequest(BaseModel):
+    image_url: str
+
+@app.post("/vector/image")
+async def vector_from_image_url(payload: ImageURLRequest):
+    print(payload)
+    try:
+        response = requests.get(payload.image_url)
+        response.raise_for_status()
+
+        image_file = BytesIO(response.content)
+        vector = extract_image_features(image_file)
+
+        if hasattr(vector, 'tolist'):
+            vector = vector.tolist()
+
+        return {
+            "status": "success",
+            "data": {
+                "vector": vector
+            }
+        }
+
+    except Exception as e:
+        return JSONResponse(status_code=500, content={
+            "status": "error",
+            "error": str(e)
+        })
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

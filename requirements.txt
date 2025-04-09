@@ -1,6 +1,5 @@
 fastapi[uvicorn]
-torch
-openai-clip
-pillow
-numpy
+pydantic
 requests
+open-clip-torch
+pillow
