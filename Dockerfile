@@ -4,6 +4,9 @@ FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 # Set working directory
 WORKDIR /app
 
+# Install git before installing Python packages
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
 # Copy only necessary files to avoid bloating the image
 COPY requirements.txt .
 
