@@ -6,17 +6,23 @@ from pydantic import BaseModel
 import requests
 from io import BytesIO
 
+
 app = FastAPI()
+
 
 class ImageURLRequest(BaseModel):
     image_url: str
 
+
 class TextRequest(BaseModel):
     text: str
+
 
 @app.post("/vector/text")
 def vector_from_text(payload: TextRequest):
     text = payload.text
+
+    print(f"Received text: {text}")
     try:
         vector = extract_text_features(text)
 
