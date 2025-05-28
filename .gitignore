@@ -25,3 +25,5 @@ pyenv
 Vagrantfile
 venv
 __pycache__/
+
+*.log
